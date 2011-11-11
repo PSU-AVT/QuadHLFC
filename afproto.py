@@ -27,6 +27,8 @@ def extract_payload(data):
 				break
 			elif start_ndx == 0:
 				break
+		elif start_ndx == -1:
+			break
 		start_ndx += 1
 
 	# If no start found trash data
@@ -35,7 +37,6 @@ def extract_payload(data):
 
 	# Not a full message
 	if len(data) < start_ndx + 4:
-		print 'Not full messsage'
 		return None, data[start_ndx:]
 	length, crc = struct.unpack('BB', data[start_ndx+1:start_ndx+3])
 
@@ -45,8 +46,7 @@ def extract_payload(data):
 		if data[end_ndx] != chr(end_byte) or data[end_ndx-1] == chr(escape_byte):
 			return None, data[start_ndx+1:]
 	except IndexError:
-		print 'Invalid msg'
-		return '', data[start_ndx+1:]
+		return None, data[start_ndx:]
 
 	payload = data[start_ndx+3:end_ndx]
 

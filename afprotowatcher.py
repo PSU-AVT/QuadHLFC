@@ -3,14 +3,14 @@ import serial
 import afproto
 
 class SerialAfprotoWatcher(evloop.FdWatcher):
-	def __init__(self, path):
+	def __init__(self, path, baudrate):
 		evloop.FdWatcher.__init__(self)
-		self.open_path(path)
+		self.open_serial_path(path, baudrate)
 		self.in_buff = ''
 		self.out_buff = ''
 
-	def open_path(self, path):
-		self.device = serial.Serial(path, 38400, timeout=0)
+	def open_serial_path(self, path, baudrate):
+		self.device = serial.Serial(path, baudrate, timeout=0)
 		self.setup_fd(self.device.fd, 0)
 		self.set_readable()
 
