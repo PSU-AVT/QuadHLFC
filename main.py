@@ -7,7 +7,7 @@ import controlgw
 
 if __name__=='__main__':
 	logging.basicConfig(level=logging.DEBUG)
-	#lfc = llfc.Llfc('/dev/ttyUSB0', 115200)
-	cgw = controlgw.ControlGw('localhost', 8091)
+	lfc = llfc.Llfc('/dev/ttyUSB0', 115200)
+	cgw = controlgw.ControlGw('localhost', 8091, lfc)
 	evloop.EventDispatcher().loop_forever()
 

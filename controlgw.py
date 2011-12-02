@@ -7,7 +7,7 @@ import evloop
 import settings
 
 class ControlGw(evloop.UdpSocketWatcher):
-	def __init__(self, host, port, controller = None):
+	def __init__(self, host, port, controller):
 		evloop.FdWatcher.__init__(self)
 
 		self.controller = controller
@@ -25,13 +25,11 @@ class ControlGw(evloop.UdpSocketWatcher):
 		self.handle_command(cmd_id, data, addr)
 
 	def handle_command(self, command_id, data, addr):
+		print "Got command %d of length %d" % (command_id, len(data))
 		if settings.ControlGw.command_id['Ping'] == command_id:
 			msg = struct.pack('B', settings.ControlGw.response_id['Pong'])
 			msg += data
 			self.socket.sendto(msg, addr)
 		else:
-			self.controller.write(afproto.serialize_payload(data))
-
-	def handle_write(self, fd):
-		pass
+			self.controller.send_msg(data)
 
