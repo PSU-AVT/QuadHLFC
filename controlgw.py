@@ -31,5 +31,5 @@ class ControlGw(evloop.UdpSocketWatcher):
 			msg += data
 			self.socket.sendto(msg, addr)
 		else:
-			self.controller.send_msg(data)
+			self.controller.send_msg(chr(command_id) + data)
 

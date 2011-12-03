@@ -24,12 +24,8 @@ class Llfc(afprotowatcher.SerialAfprotoWatcher):
 			2: self.handle_debug_msg,
 			3: self.handle_error_msg,
 			4: self.handle_gyro_state,
-			5: self.handle_accelero_state, }
-		self.command_ids = {
-			'SET_P_GAINS': 8,
-			'SET_I_GAINS': 9,
-			'SET_D_GAINS': 10
-		}
+			5: self.handle_accelero_state,
+			6: self.handle_intertial_state }
 
 	def handle_msg(self, msg):
 		logging.debug('Got msg from LLFC')
@@ -58,15 +54,9 @@ class Llfc(afprotowatcher.SerialAfprotoWatcher):
 	def handle_accelero_state(self, msg):
 		logging.debug('LLFC Accelero State: X: %f\tY: %f\tZ: %f' % struct.unpack('fff', msg[1:]))
 
+	def handle_intertial_state(self, msg):
+		logging.debug('LLFC Inertial State: Roll: %f\tPitch: %f\tYaw: %f' % struct.unpack('fff', msg[:12]))
+
 	def send_command(self, cmd_id, data):
 		self.send_msg(chr(cmd_id) + data)
-
-	def set_p_gains(self, state):
-		self.send_command(self.command_ids['SET_P_GAINS'], state.toBinaryString())
-
-	def set_i_gains(self, state):
-		self.send_command(self.command_ids['SET_I_GAINS'], state.toBinaryString())
-
-	def set_d_gains(self, state):
-		self.send_command(self.command_ids['SET_D_GAINS'], state.toBinaryString())
 

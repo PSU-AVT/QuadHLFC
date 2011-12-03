@@ -16,6 +16,8 @@ class SerialAfprotoWatcher(evloop.FdWatcher):
 
 	def send_msg(self, msg):
 		frame = afproto.serialize_payload(msg)
+		self.device.write(frame)
+		return
 		if len(self.out_buff) == 0:
 			self.set_writable()
 		self.out_buff += frame
