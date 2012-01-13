@@ -59,13 +59,16 @@ class Llfc(afprotowatcher.SerialAfprotoWatcher):
 		self.publish('LlfcError', msg)
 
 	def handle_gyro_state(self, msg):
-		logging.debug('LLFC Gyro State: Roll: %f\tPitch: %f\tYaw: %f' % struct.unpack('fff', msg[1:]))
+		logging.debug('LLFC Gyro State:\tRoll: %f\tPitch: %f\tYaw: %f' % struct.unpack('fff', msg[1:]))
+		self.publish('LlfcStateGyro', msg[1:])
 
 	def handle_accelero_state(self, msg):
-		logging.debug('LLFC Accelero State: X: %f\tY: %f\tZ: %f' % struct.unpack('fff', msg[1:]))
+		logging.debug('LLFC Accelero State:\tX: %f\tY: %f\tZ: %f' % struct.unpack('fff', msg[1:]))
+		self.publish('LlfcStateAccelero', msg[1:])
 
 	def handle_intertial_state(self, msg):
-		logging.debug('LLFC Inertial State: Roll: %f\tPitch: %f\tYaw: %f' % struct.unpack('fff', msg[1:13]))
+		logging.debug('LLFC Inertial State:\tRoll: %f\tPitch: %f\tYaw: %f' % struct.unpack('fff', msg[1:13]))
+		self.publish('LlfcStateInertial', msg[1:])
 
 	def send_command(self, cmd_id, data):
 		self.send_msg(chr(cmd_id) + data)
