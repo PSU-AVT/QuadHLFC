@@ -55,7 +55,7 @@ class Llfc(afprotowatcher.SerialAfprotoWatcher):
 		logging.debug('LLFC Accelero State: X: %f\tY: %f\tZ: %f' % struct.unpack('fff', msg[1:]))
 
 	def handle_intertial_state(self, msg):
-		logging.debug('LLFC Inertial State: Roll: %f\tPitch: %f\tYaw: %f' % struct.unpack('fff', msg[:12]))
+		logging.debug('LLFC Inertial State: Roll: %f\tPitch: %f\tYaw: %f' % struct.unpack('fff', msg[1:13]))
 
 	def send_command(self, cmd_id, data):
 		self.send_msg(chr(cmd_id) + data)
