@@ -4,6 +4,7 @@ import evloop
 
 import llfc
 import controlgw
+import pubsub
 
 if __name__=='__main__':
 	logging.basicConfig(level=logging.DEBUG)

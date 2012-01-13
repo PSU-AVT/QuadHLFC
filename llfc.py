@@ -18,7 +18,7 @@ class State(object):
 		self.roll, self.pitch, self.yaw, self.x, self.y, self.z = struct.unpack('ffffff', string)
 
 class Llfc(afprotowatcher.SerialAfprotoWatcher):
-	def __init__(self, path='/dev/ttyUSB0', baudrate=115200):
+	def __init__(self, path='/dev/ttyUSB0', baudrate=115200, pubsub_server=None):
 		afprotowatcher.SerialAfprotoWatcher.__init__(self, path, baudrate)
 		self.msg_handlers = {
 			2: self.handle_debug_msg,
@@ -26,6 +26,10 @@ class Llfc(afprotowatcher.SerialAfprotoWatcher):
 			4: self.handle_gyro_state,
 			5: self.handle_accelero_state,
 			6: self.handle_intertial_state }
+		self.pubsub_server = pubsub_server
+
+	def publish(self, tag, msg):
+		self.pubsub_server.publish('' + tag + ':' + msg)
 
 	def handle_msg(self, msg):
 		logging.debug('Got msg from LLFC')
