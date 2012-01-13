@@ -29,10 +29,12 @@ class Llfc(afprotowatcher.SerialAfprotoWatcher):
 		self.pubsub_server = pubsub_server
 
 	def publish(self, tag, msg):
-		self.pubsub_server.publish('' + tag + ':' + msg)
+		try:
+			self.pubsub_server.publish('' + tag + ': ' + msg)
+		except AttributeError:
+			pass
 
 	def handle_msg(self, msg):
-		logging.debug('Got msg from LLFC')
 		try:
 			self.msg_handlers[ord(msg[0])](msg)
 		except KeyError:
@@ -45,12 +47,16 @@ class Llfc(afprotowatcher.SerialAfprotoWatcher):
 		# log debug message
 		logging.debug('LLFC Debug: %s' % msg)
 
+		self.publish('LlfcDebug', msg)
+
 	def handle_error_msg(self, msg):
 		# trash the msg id byte
 		msg = msg[1:]
 
 		# log error message
 		logging.error('LLFC Error: %s' % msg)
+
+		self.publish('LlfcError', msg)
 
 	def handle_gyro_state(self, msg):
 		logging.debug('LLFC Gyro State: Roll: %f\tPitch: %f\tYaw: %f' % struct.unpack('fff', msg[1:]))
