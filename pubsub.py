@@ -3,10 +3,10 @@ import socket
 import time
 
 class Client(object):
-	def __init__(self, host, port, prefix, sub_time):
+	def __init__(self, host, port, prefixes, sub_time):
 		self.host = host
 		self.port = port
-		self.prefix = prefix
+		self.prefixes = prefixes
 		self.sub_time = sub_time
 
 class PubSubServer(evloop.UdpSocketWatcher):
@@ -30,11 +30,8 @@ class PubSubServer(evloop.UdpSocketWatcher):
 		data = data.split('\n')
 		cur_time = time.time()
 		try:
-			for line in data:
-				if line == '':
-					continue
-				self.clients[addr].prefix = line
-				self.clients[addr].sub_time = cur_time
+			self.clients[addr].prefixes = data
+			self.clients[addr].sub_time = cur_time
 		except KeyError:
 			self.clients[addr] = Client(addr[0], addr[1], data, cur_time)
 
@@ -50,9 +47,11 @@ class PubSubServer(evloop.UdpSocketWatcher):
 
 	def publish(self, msg):
 		for client in self.clients.values():
-			if msg.startswith(client.prefix):
-				print 'sending', msg, 'to', client.host
-				self.sendto(msg, (client.host, client.port))
+			print 'checking', client, client.prefixes
+			for prefix in client.prefixes:
+				if msg.startswith(prefix):
+					print 'sending', msg, 'to', client.host
+					self.sendto(msg, (client.host, client.port))
 
 	def do_publishing(self):
 		self.publish('aYou should see this')
