@@ -25,7 +25,8 @@ class Llfc(afprotowatcher.SerialAfprotoWatcher):
 			3: self.handle_error_msg,
 			4: self.handle_gyro_state,
 			5: self.handle_accelero_state,
-			6: self.handle_intertial_state }
+			6: self.handle_intertial_state,
+			7: self.handle_motors_state, }
 		self.pubsub_server = pubsub_server
 
 	def publish(self, tag, msg):
@@ -69,6 +70,10 @@ class Llfc(afprotowatcher.SerialAfprotoWatcher):
 	def handle_intertial_state(self, msg):
 		logging.debug('LLFC Inertial State:\tRoll: %f\tPitch: %f\tYaw: %f' % struct.unpack('fff', msg[1:13]))
 		self.publish('LlfcStateInertial', msg[1:])
+
+	def handle_motors_state(self, msg):
+		logging.debug('Llfc Motors State: \t1: %f\t2: %f\t3: %f\t4: %f' % struct.unpack('ffff', msg[1:]))
+		self.publish('LlfcStateMotors', msg[1:])
 
 	def send_command(self, cmd_id, data):
 		self.send_msg(chr(cmd_id) + data)

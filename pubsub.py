@@ -47,10 +47,8 @@ class PubSubServer(evloop.UdpSocketWatcher):
 
 	def publish(self, msg):
 		for client in self.clients.values():
-			print 'checking', client, client.prefixes
 			for prefix in client.prefixes:
 				if msg.startswith(prefix):
-					print 'sending', msg, 'to', client.host
 					self.sendto(msg, (client.host, client.port))
 
 	def do_publishing(self):
