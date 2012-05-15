@@ -1,10 +1,9 @@
 import socket
 import struct
+import logging
 
 import afproto
 import evloop
-
-import settings
 
 class ControlGw(evloop.UdpSocketWatcher):
 	def __init__(self, host, port, controller):
@@ -25,7 +24,9 @@ class ControlGw(evloop.UdpSocketWatcher):
 		self.handle_command(cmd_id, data, addr)
 
 	def handle_command(self, command_id, data, addr):
-		print "Got command %d of length %d" % (command_id, len(data))
+		logging.debug("Got command %d of length %d" % (command_id, len(data)))
+		if self.controller == None:
+			return
 		if settings.ControlGw.command_id['Ping'] == command_id:
 			msg = struct.pack('B', settings.ControlGw.response_id['Pong'])
 			msg += data
