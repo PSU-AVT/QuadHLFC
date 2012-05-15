@@ -4,6 +4,7 @@ import logging
 
 import afproto
 import evloop
+import settings
 
 class ControlGw(evloop.UdpSocketWatcher):
 	def __init__(self, host, port, controller):
