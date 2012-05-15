@@ -1,5 +1,5 @@
-Portland State University Quadcopter High Level Flight Computer
-===============================================================
+Portland State University Quadcopter HLFC
+=========================================
 
 Building
 --------
