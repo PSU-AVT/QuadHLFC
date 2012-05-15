@@ -12,10 +12,10 @@ class State(object):
 		self.z = z
 
 	def toBinaryString(self):
-		return struct.pack('=ffffff', self.pitch, self.roll, self.yaw, self.x, self.y, self.z)
+		return struct.pack('=ffffff', self.roll, self.pitch, self.yaw, self.x, self.y, self.z)
 
 	def fromBinaryString(self, string):
-		self.pitch, self.roll, self.yaw, self.x, self.y, self.z = struct.unpack('ffffff', string)
+		self.roll, self.pitch, self.yaw, self.x, self.y, self.z = struct.unpack('ffffff', string)
 
 class Llfc(afprotowatcher.SerialAfprotoWatcher):
 	def __init__(self, path='/dev/ttyUSB0', baudrate=115200, pubsub_server=None):
