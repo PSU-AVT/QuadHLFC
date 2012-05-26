@@ -18,6 +18,13 @@ class State(object):
 		self.roll, self.pitch, self.yaw, self.x, self.y, self.z = struct.unpack('ffffff', string)
 
 class Llfc(afprotowatcher.SerialAfprotoWatcher):
+	_instance = None
+
+	def __new__(cls, *args, **kwargs):
+		if not cls._instance:
+			cls._instance = super(Llfc, cls).__new__(cls, *args, **kwargs)
+		return cls._instance
+
 	def __init__(self, path='/dev/ttyUSB0', baudrate=115200, pubsub_server=None):
 		afprotowatcher.SerialAfprotoWatcher.__init__(self, path, baudrate)
 		self.msg_handlers = {
