@@ -50,15 +50,6 @@ class Llfc(afprotowatcher.SerialAfprotoWatcher):
 		except KeyError:
 			pass
 
-	def handle_debug_msg(self, msg):
-		# trash the msg id byte
-		msg = msg[1:]		
-		
-		# log debug message
-		logging.debug('LLFC Debug: %s' % msg)
-
-		self.publish('LlfcDebug', msg)
-
 	def send_command(self, cmd_id, data):
 		self.send_msg(chr(cmd_id) + data)
 
