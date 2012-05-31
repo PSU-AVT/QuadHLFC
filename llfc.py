@@ -11,7 +11,8 @@ class Llfc(afprotowatcher.SerialAfprotoWatcher):
 		return cls._instance
 
 	def __init__(self, path='/dev/ttyUSB0', baudrate=115200):
-		afprotowatcher.SerialAfprotoWatcher.__init__(self, path, baudrate)
+		if path != None:
+			afprotowatcher.SerialAfprotoWatcher.__init__(self, path, baudrate)
 		str_unpack = lambda x: str(struct.unpack('%ds' % len(x), x))
 		state_unpack = lambda x: struct.unpack('6f' % len(x))
 		recv_cmds = {
