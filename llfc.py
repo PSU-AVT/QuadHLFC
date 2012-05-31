@@ -2,21 +2,6 @@ import afprotowatcher
 import logging
 import struct
 
-class State(object):
-	def __init__(self, roll, pitch, yaw, x, y, z):
-		self.roll = roll
-		self.pitch = pitch
-		self.yaw = yaw
-		self.x = x
-		self.y = y
-		self.z = z
-
-	def toBinaryString(self):
-		return struct.pack('=ffffff', self.roll, self.pitch, self.yaw, self.x, self.y, self.z)
-
-	def fromBinaryString(self, string):
-		self.roll, self.pitch, self.yaw, self.x, self.y, self.z = struct.unpack('ffffff', string)
-
 class Llfc(afprotowatcher.SerialAfprotoWatcher):
 	_instance = None
 
@@ -25,15 +10,15 @@ class Llfc(afprotowatcher.SerialAfprotoWatcher):
 			cls._instance = super(Llfc, cls).__new__(cls, *args, **kwargs)
 		return cls._instance
 
-	def __init__(self, path='/dev/ttyUSB0', baudrate=115200, pubsub_server=None):
+	def __init__(self, path='/dev/ttyUSB0', baudrate=115200):
 		afprotowatcher.SerialAfprotoWatcher.__init__(self, path, baudrate)
 		str_unpack = lambda x: str(struct.unpack('%ds' % len(x), x))
-		state_unpack = lambda x: struct.unpack('%6f' % len(x))
+		state_unpack = lambda x: struct.unpack('6f' % len(x))
 		recv_cmds = {
 			2: ('debug_msg', str_unpack),
 			3: ('error_msg', str_unpack),
-			4: ('gyro_state', state_unpack),
-			5: ('accelerometer_state', state_unpack),
+			4: ('gyro_state', lambda x: struct.unpack('3f', x)),
+			5: ('accelerometer_state', lambda x: struct.unpack('3f', x)),
 			6: ('inertial_state', state_unpack),
 			7: ('motors_state', lambda x: struct.unpack('4f', x)),
 			8: ('setpoint_state', state_unpack),
