@@ -2,19 +2,17 @@ import logging
 import collections
 import os
 
-import settings
+class PluginLoader(object):
+	def __init__(self, plugins_dir):
+		self.plugins_dir = plugins_dir
+		self.plugins = collections.deque()
 
-class PluginLoader(Object):
-	def __init__(self):
-		self.plugins_dir = settings.plugins_dir
-		self.plugins = collections.dequeue()
-
-	def load_all():
+	def load_all(self):
 		logging.debug('Starting plugin loading')
 		plugins = os.listdir(self.plugins_dir)
-			for plugin in plugins:
-				print plugin
+		for plugin in plugins:
+			print plugin
 		logging.debug('Finished plugin loading')
 
-class Plugin(Object):
+class Plugin(object):
 	pass
