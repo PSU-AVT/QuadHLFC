@@ -15,11 +15,13 @@ class PluginLoader(object):
 		plugins_dir = os.listdir(self.plugins_dir)
 		for poss_plugin in plugins_dir:
 			full_path = self.plugins_dir + poss_plugin
+			full_plugin_path = full_path.replace('/', '.')
 			if poss_plugin[-3:] == '.py':
-				print 'loading %s' % full_path
-				imp.load_source('plugins.'+poss_plugin, full_path)
+				logging.debug('loading %s' % full_path)
+				__import__(full_plugin_path[:-3])
 			elif os.path.isdir(full_path) and os.path.isfile(full_path+'/__init__.py'):
-				imp.load_source('plugins.'+poss_plugin, full_path+'/__init__.py')
-			print poss_plugin
+				__import__(full_plugin_path)
+			else:
+				logging.debug('skipping %s' + full_path)
 		logging.debug('Finished plugin loading')
 
