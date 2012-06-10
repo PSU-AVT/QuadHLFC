@@ -31,8 +31,16 @@ class PluginLoader(object):
 			for key, value in mod_dict.items():
 				try:
 					if issubclass(value, plugin.Plugin):
-						logging.debug('Initializing %s' % value.__name__)
-						value()
+						try:
+							if value.enabled:
+								logging.debug('Initializing %s' % value.__name__)
+								value()
+							else:
+								logging.debug('Skipping %s, not enabled' % value.__name__)
+						except AttributeError:
+								logging.debug('Initializing %s' % value.__name__)
+								value()
+							
 				except TypeError:
 					continue
 			
