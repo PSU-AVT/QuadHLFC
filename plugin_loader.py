@@ -1,7 +1,8 @@
 import logging
 import collections
 import os
-import imp
+
+import plugin
 
 class PluginLoader(object):
 	def __init__(self, plugins_dir):
@@ -18,10 +19,22 @@ class PluginLoader(object):
 			full_plugin_path = full_path.replace('/', '.')
 			if poss_plugin[-3:] == '.py':
 				logging.debug('loading %s' % full_path)
-				__import__(full_plugin_path[:-3])
+				module=__import__(full_plugin_path[:-3])
+				mod_dict = module.__dict__[poss_plugin[:-3]]
 			elif os.path.isdir(full_path) and os.path.isfile(full_path+'/__init__.py'):
-				__import__(full_plugin_path)
+				module=__import__(full_plugin_path)
+				mod_dict = module.__dict__[poss_plugin]
 			else:
 				logging.debug('skipping %s' + full_path)
+				continue
+			mod_dict = mod_dict.__dict__
+			for key, value in mod_dict.items():
+				try:
+					if issubclass(value, plugin.Plugin):
+						print value
+						value()
+				except TypeError:
+					continue
+			
 		logging.debug('Finished plugin loading')
 

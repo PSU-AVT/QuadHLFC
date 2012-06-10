@@ -1,10 +1,8 @@
 import llfc
-
-def say_hello():
-	print 'Hello, world!'
-	evloop.add_timer(1, say_hello)
-
-def on_load():
-	say_hello()
+import plugin
 
 print 'hello'
+
+class HelloWorld(plugin.Plugin):
+	def __init__(self):
+		print 'plugin hello'
