@@ -25,13 +25,13 @@ class PluginLoader(object):
 				module=__import__(full_plugin_path)
 				mod_dict = module.__dict__[poss_plugin]
 			else:
-				logging.debug('skipping %s' + full_path)
+				logging.debug('skipping %s due to invalid path (No __init__.py or not .py)' % full_path)
 				continue
 			mod_dict = mod_dict.__dict__
 			for key, value in mod_dict.items():
 				try:
 					if issubclass(value, plugin.Plugin):
-						print value
+						logging.debug('Initializing %s' % value.__name__)
 						value()
 				except TypeError:
 					continue
