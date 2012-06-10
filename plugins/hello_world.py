@@ -6,3 +6,5 @@ def say_hello():
 
 def on_load():
 	say_hello()
+
+print 'hello'
