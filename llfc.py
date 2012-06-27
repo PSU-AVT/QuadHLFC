@@ -45,3 +45,4 @@ class Llfc(afprotowatcher.SerialAfprotoWatcher):
 	def add_cmd_handler(self, cmd_name, handler):
 		self.cmd_handlers[cmd_name] = handler
 
+llfc = Llfc(None, 9600)

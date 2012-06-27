@@ -14,7 +14,6 @@ if __name__=='__main__':
 	(options, args) = parser.parse_args()
 
 	import llfc
-	lfc = llfc.Llfc(None, 57600)
 
 	pl = plugin_loader.PluginLoader(settings.plugins_dir)
 	pl.load_all()
