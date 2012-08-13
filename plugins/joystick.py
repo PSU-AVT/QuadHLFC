@@ -1,28 +1,35 @@
-# import logging
-import sys # what is sys?
+import llfc
+import plugin
 
-# import plugin
-# from llfc import llfc
+import pygame
 
-# find out which port the joystick uses
-#  heavily depends on http://hackshark.com/?p=147#axzz22jTSqLWt
+print 'Initializing joystick plugin.'
 
-pipe = open('/dev/hidraw0','r')
+# Joystick port on my laptop. More likely to be js0
+jsport = "/dev/hidraw0"
 
-action = []
-spacing = 0
-while 1:
-        for character in pipe.read(1):
-                action += [character]
-                if len(action) == 8:
-                        for byte in action:
-                                sys.stdout.write('%02X ' % ord(byte))
-                        spacing += 1
-                        if spacing == 2:
-                                sys.stdout.write('\n')
-                                spacing = 0
-                        sys.stdout.write('\n')
-                        sys.stdout.flush()
-                        action = []
+# Control Gateway listens on UDP port 8089 and binds to all IPs on host
+# First byte of CGW is command ID
 
+class Joystick(plugin.Plugin):
+        def __init__(self):
+                print 'Self'
+        def stick_movement(self, socket):
+                data_stick = self.socket.recvfrom(4096)
+                print 'Got: %s' % data_stick
+        def button_press(self, button):
+                data_button = self.socket.recvfrom(4096)
+                print 'Button press: %s' % data_button
+
+# where does this go?
+
+        while True:
+                handleEvent();
+
+# X and Y axes
+# Button press
+
+# register the joystick file descripter as a handler
+        # if any sockets have data or timers have timed out, 
+        # each plugin has an event handler must return immediately
 
