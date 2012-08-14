@@ -15,6 +15,8 @@ class JoystickWatcher(evloop.FdWatcher):
 		print 'Got joystick event'
 
 class JoystickPlugin(plugin.Plugin):
+	enabled = False
+
 	def __init__(self):
 		self.joystick_watcher = JoystickWatcher('/dev/js0')
 
