@@ -1,8 +1,8 @@
 import llfc
 import plugin
 
-print 'hello'
-
 class HelloWorld(plugin.Plugin):
+	enabled = False
+
 	def __init__(self):
 		print 'plugin hello'
