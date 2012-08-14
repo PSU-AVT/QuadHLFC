@@ -4,6 +4,10 @@ import evloop
 import struct
 
 class JoystickEvent(object):
+	BUTTON_EVENT = 0x01
+	AXIS_EVENT = 0x02
+	INIT_EVENT = 0x80
+
 	@staticmethod
 	def init_from_linux_raw(msg):
 		return JoystickEvent(*struct.unpack("IhBB", msg))
