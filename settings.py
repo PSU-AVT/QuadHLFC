@@ -6,6 +6,6 @@ logging.basicConfig(level=logging.DEBUG)
 joystick_enabled = False
 joystick_path = '/dev/input/js0'
 
-remoteevent_enabled = False
+remoteevent_enabled = True
 remoteevent_host = ''
-remoteevent_port = '9601'
+remoteevent_port = 9601

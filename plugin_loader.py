@@ -28,21 +28,22 @@ class PluginLoader(object):
 				logging.debug('skipping %s due to invalid path (No __init__.py or not .py)' % full_path)
 				continue
 			mod_dict = mod_dict.__dict__
+			self.plugins = []
 			for key, value in mod_dict.items():
 				try:
-					if issubclass(value, plugin.Plugin):
-						try:
-							if value.enabled:
-								logging.debug('Initializing %s' % value.__name__)
-								value()
-							else:
-								logging.debug('Skipping %s, not enabled' % value.__name__)
-						except AttributeError:
-								logging.debug('Initializing %s' % value.__name__)
-								value()
-							
+					is_subclass = issubclass(value, plugin.Plugin)
 				except TypeError:
 					continue
+				if is_subclass:
+					try:
+						enabled = value.enabled
+					except AttributeError:
+						enabled = True
+					if enabled:
+						logging.debug('Initializing %s' % value.__name__)
+						self.plugins.append(value())
+					else:
+						logging.debug('Skipping %s, not enabled' % value.__name__)
 			
 		logging.debug('Finished plugin loading')
 

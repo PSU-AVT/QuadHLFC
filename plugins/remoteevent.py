@@ -47,3 +47,4 @@ class RemoteEventPlugin(plugin.Plugin):
 	def __init__(self):
 		self.tcp_server = TcpServer(settings.remoteevent_host,\
 		                            settings.remoteevent_port)
+
