@@ -1,6 +1,7 @@
 import afprotowatcher
 import logging
 import struct
+import eventbus
 
 def cmd_handler(fn, cmd_name):
 	Llfc().add_cmd_handler(cmd_name, fn)
@@ -27,7 +28,6 @@ class Llfc(afprotowatcher.SerialAfprotoWatcher):
 			7: ('motors_state', lambda x: struct.unpack('4f', x)),
 			8: ('setpoint_state', state_unpack),
 			}
-		self.cmd_handlers = {}
 
 	def handle_msg(self, msg):
 		try:
@@ -35,14 +35,11 @@ class Llfc(afprotowatcher.SerialAfprotoWatcher):
 			recv_cmd = self.recv_cmds[cmd_id]
 			name = recv_cmd[0]
 			unpacker = recv_cmd[1]
-			self.cmd_handlers[name](*unpacker(msg[1:]))
+			eventbus.event_bus.emit('llfc.%s', name, *unpacker(msg[1:]))
 		except KeyError:
 			pass
 
 	def send_command(self, cmd_id, data):
 		self.send_msg(chr(cmd_id) + data)
-
-	def add_cmd_handler(self, cmd_name, handler):
-		self.cmd_handlers[cmd_name] = handler
 
 llfc = Llfc(None, 9600)
