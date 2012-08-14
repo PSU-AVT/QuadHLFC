@@ -2,6 +2,7 @@ import llfc
 import plugin
 import evloop
 import struct
+import settings
 
 class JoystickEvent(object):
 	BUTTON_EVENT = 0x01
@@ -31,8 +32,8 @@ class JoystickWatcher(evloop.FdWatcher):
 		event = JoystickEvent.init_from_linux_raw(msg)
 
 class JoystickPlugin(plugin.Plugin):
-	enabled = False
+	enabled = settings.joystick_enabled
 
 	def __init__(self):
-		self.joystick_watcher = JoystickWatcher('/dev/js0')
+		self.joystick_watcher = JoystickWatcher(settings.joystick_path)
 
