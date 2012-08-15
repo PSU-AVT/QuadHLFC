@@ -58,9 +58,9 @@ class JoystickWatcher(evloop.FdWatcher):
 			elif event.number == 1:
 				llfc.set_pitch(event.value / float(32767))
 		elif event.event_type == JoystickEvent.BUTTON_EVENT:
-			if event.number == 2 or event.number == 3:
+			if (event.number == 2 or event.number == 3) and event.value == 1:
 				llfc.turn_off()
-			elif event.number == 4 or event.number == 5:
+			elif (event.number == 4 or event.number == 5) and event.value == 1:
 				llfc.turn_on()
 
 class JoystickPlugin(plugin.Plugin):
