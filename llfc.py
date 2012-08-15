@@ -58,4 +58,10 @@ class Llfc(afprotowatcher.SerialAfprotoWatcher):
 	def set_z(self, z):
 		self.send_command(4, struct.pack('f', z))
 
+	def turn_on(self):
+		self.send_command(7, '')
+
+	def turn_off(self):
+		self.send_command(6, '')
+
 llfc = Llfc(None, 9600)
