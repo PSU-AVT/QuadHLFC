@@ -5,6 +5,7 @@ import evloop
 import struct
 import settings
 import select
+import logging
 
 class JoystickEvent(object):
 	BUTTON_EVENT = 0x01
@@ -45,11 +46,17 @@ class JoystickWatcher(evloop.FdWatcher):
 			self.got_event(event)
 
 	def got_event(self, event):
+		logging.debug('Joystick event: %s' % event)
     		event_bus.emit('joystick.got_event', event)
-		if event.number == 3 and event.event_type == JoystickEvent.AXIS_EVENT:
-			event.value -= 32767
-			event.value = -event.value
-			llfc.set_z(event.value / float(32767))
+		if event.event_type == JoystickEvent.AXIS_EVENT:
+			if event.number == 3:
+				event.value -= 32767
+				event.value = -event.value
+				llfc.set_z(event.value / float(32767))
+			elif event.number == 0:
+				llfc.set_roll(event.value / float(32767))
+			elif event.number == 1:
+				llfc.set_pitch(event.value / float(32767))
 
 class JoystickPlugin(plugin.Plugin):
 	enabled = settings.joystick_enabled
