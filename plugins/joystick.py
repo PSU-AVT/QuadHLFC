@@ -1,4 +1,5 @@
 from llfc import llfc
+from eventbus import event_bus
 import plugin
 import evloop
 import struct
@@ -44,6 +45,7 @@ class JoystickWatcher(evloop.FdWatcher):
 			self.got_event(event)
 
 	def got_event(self, event):
+    		event_bus.emit('joystick.got_event', event)
 		if event.number == 3:
 			event.value -= 32767
 			event.value = -event.value
