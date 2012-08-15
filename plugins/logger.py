@@ -9,7 +9,7 @@ class Logger(plugin.Plugin):
 		event_bus.connect('llfc.error', self.error)
 
 	def debug(self, msg):
-		logging.debug('Quadcopter: ' %s)
+		logging.debug('Quadcopter: %s' % msg)
 
 	def error(self, msg):
-		logging.error('Quadcopter: ' %s)
+		logging.error('Quadcopter: %s' % msg)
