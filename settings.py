@@ -10,4 +10,4 @@ remoteevent_enabled = True
 remoteevent_host = '0.0.0.0'
 remoteevent_port = 9601
 
-ai_enabled = True
+ai_enabled = False

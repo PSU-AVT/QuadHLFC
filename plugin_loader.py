@@ -1,6 +1,7 @@
 import logging
 import collections
 import os
+import sys
 
 import plugin
 
@@ -14,6 +15,7 @@ class PluginLoader(object):
 	def load_all(self):
 		logging.debug('Starting plugin loading')
 		plugins_dir = os.listdir(self.plugins_dir)
+		found_driver = False
 		for poss_plugin in plugins_dir:
 			full_path = self.plugins_dir + poss_plugin
 			full_plugin_path = full_path.replace('/', '.')
@@ -39,7 +41,19 @@ class PluginLoader(object):
 						enabled = value.enabled
 					except AttributeError:
 						enabled = True
+
 					if enabled:
+						try:
+							is_driver = value.driver
+						except AttributeError:
+							is_driver = False
+
+						if is_driver:
+							if found_driver:
+								logging.error("More than one driver detected. Exiting.")
+								sys.exit(1)
+							found_driver = True
+								
 						logging.debug('Initializing %s' % value.__name__)
 						self.plugins.append(value())
 					else:

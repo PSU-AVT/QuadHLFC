@@ -53,6 +53,7 @@ class JoystickWatcher(evloop.FdWatcher):
 
 class JoystickPlugin(plugin.Plugin):
 	enabled = settings.joystick_enabled
+	driver = True
 
 	def __init__(self):
 		self.joystick_watcher = JoystickWatcher(settings.joystick_path)
