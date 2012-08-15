@@ -3,6 +3,7 @@ import plugin
 import evloop
 import struct
 import settings
+import select
 
 class JoystickEvent(object):
 	BUTTON_EVENT = 0x01
@@ -23,11 +24,11 @@ class JoystickWatcher(evloop.FdWatcher):
 	def __init__(self, dev_path):
 		super(JoystickWatcher, self).__init__()
 		f = open(dev_path)
-		self.fd = fd
-		self.setup_fd(f, 0)
-		self.set_readable(True)
+		self.fd = f
+		self.setup_fd(f, select.POLLIN)
 
 	def handle_read(self, fd):
+		print 'event'
 		msg = self.fd.read(8)
 		event = JoystickEvent.init_from_linux_raw(msg)
 

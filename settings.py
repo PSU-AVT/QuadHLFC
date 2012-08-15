@@ -3,7 +3,7 @@ plugins_dir = 'plugins'
 import logging
 logging.basicConfig(level=logging.DEBUG)
 
-joystick_enabled = False
+joystick_enabled = True
 joystick_path = '/dev/input/js0'
 
 remoteevent_enabled = True
