@@ -17,6 +17,7 @@ class Llfc(afprotowatcher.SerialAfprotoWatcher):
 	def __init__(self, path='/dev/ttyUSB0', baudrate=115200):
 		if path != None:
 			afprotowatcher.SerialAfprotoWatcher.__init__(self, path, baudrate)
+		self.path = path
 		str_unpack = lambda x: str(struct.unpack('%ds' % len(x), x))
 		state_unpack = lambda x: struct.unpack('6f' % len(x))
 		recv_cmds = {
@@ -40,6 +41,21 @@ class Llfc(afprotowatcher.SerialAfprotoWatcher):
 			pass
 
 	def send_command(self, cmd_id, data):
-		self.send_msg(chr(cmd_id) + data)
+		logging.debug('Sending command %d to llfc with data %s' % (cmd_id\
+		              , ''.join(['%02x' % ord(ch) for ch in data])))
+		if self.path != None:
+			self.send_msg(chr(cmd_id) + data)
+
+	def set_roll(self, roll):
+		self.send_command(1, struct.pack('f', roll))
+
+	def set_pitch(self, pitch):
+		self.send_command(2, struct.pack('f', pitch))
+
+	def set_yaw(self, yaw):
+		self.send_command(5, struct.pack('f', yaw))
+
+	def set_z(self, z):
+		self.send_command(4, struct.pack('f', z))
 
 llfc = Llfc(None, 9600)

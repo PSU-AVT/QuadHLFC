@@ -1,4 +1,4 @@
-import llfc
+from llfc import llfc
 import plugin
 import evloop
 import struct
@@ -47,7 +47,7 @@ class JoystickWatcher(evloop.FdWatcher):
 		if event.number == 3:
 			event.value -= 32767
 			event.value = -event.value
-		print event
+			llfc.set_z(event.value / float(32767))
 
 class JoystickPlugin(plugin.Plugin):
 	enabled = settings.joystick_enabled
