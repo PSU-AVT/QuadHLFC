@@ -41,7 +41,13 @@ class JoystickWatcher(evloop.FdWatcher):
 		while msg:
 			msg = self.fd.read(8)
 			event = JoystickEvent.init_from_linux_raw(msg)
-			print event
+			self.got_event(event)
+
+	def got_event(self, event):
+		if event.number == 3:
+			event.value -= 32767
+			event.value = -event.value
+		print event
 
 class JoystickPlugin(plugin.Plugin):
 	enabled = settings.joystick_enabled
