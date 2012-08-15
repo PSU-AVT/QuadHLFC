@@ -8,7 +8,7 @@ import select
 
 class JoystickEvent(object):
 	BUTTON_EVENT = 0x01
-	AXIS_EVENT = 0x00
+	AXIS_EVENT = 0x02
 	INIT_EVENT = 0x80
 
 	@staticmethod
@@ -24,7 +24,7 @@ class JoystickEvent(object):
 	def __repr__(self):
 		type_str = {
 			self.BUTTON_EVENT: 'BUTTON',
-			self.AXIS_EVENT: 'AXIS'}[self.event_type & 0x1]
+			self.AXIS_EVENT: 'AXIS'}[self.event_type & ~0x80]
 		if self.event_type & 0x80 != 0:
 			type_str += ' (init)'
 		return 'Time: %d Type: %s Number: %d Value: %d' % (\
@@ -46,7 +46,7 @@ class JoystickWatcher(evloop.FdWatcher):
 
 	def got_event(self, event):
     		event_bus.emit('joystick.got_event', event)
-		if event.number == 3:
+		if event.number == 3 and event.event_type == JoystickEvent.AXIS_EVENT:
 			event.value -= 32767
 			event.value = -event.value
 			llfc.set_z(event.value / float(32767))
