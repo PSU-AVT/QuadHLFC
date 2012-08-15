@@ -7,7 +7,7 @@ import select
 
 class JoystickEvent(object):
 	BUTTON_EVENT = 0x01
-	AXIS_EVENT = 0x02
+	AXIS_EVENT = 0x00
 	INIT_EVENT = 0x80
 
 	@staticmethod
@@ -20,6 +20,15 @@ class JoystickEvent(object):
 		self.event_type = event_type
 		self.number = number
 
+	def __repr__(self):
+		type_str = {
+			self.BUTTON_EVENT: 'BUTTON',
+			self.AXIS_EVENT: 'AXIS'}[self.event_type & 0x1]
+		if self.event_type & 0x80 != 0:
+			type_str += ' (init)'
+		return 'Time: %d Type: %s Number: %d Value: %d' % (\
+		        self.time, type_str, self.number, self.value)
+
 class JoystickWatcher(evloop.FdWatcher):
 	def __init__(self, dev_path):
 		super(JoystickWatcher, self).__init__()
@@ -28,9 +37,11 @@ class JoystickWatcher(evloop.FdWatcher):
 		self.setup_fd(f, select.POLLIN)
 
 	def handle_read(self, fd):
-		print 'event'
-		msg = self.fd.read(8)
-		event = JoystickEvent.init_from_linux_raw(msg)
+		msg = True
+		while msg:
+			msg = self.fd.read(8)
+			event = JoystickEvent.init_from_linux_raw(msg)
+			print event
 
 class JoystickPlugin(plugin.Plugin):
 	enabled = settings.joystick_enabled
