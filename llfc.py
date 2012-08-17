@@ -30,6 +30,8 @@ class Llfc(afprotowatcher.SerialAfprotoWatcher):
 			6: ('inertial_state', state_unpack),
 			7: ('motors_state', lambda x: struct.unpack('4f', x)),
 			8: ('setpoint_state', state_unpack),
+			11: ('turn_on', None),
+			12: ('turn_off', None)
 			}
 
 	def handle_msg(self, msg):
@@ -37,11 +39,15 @@ class Llfc(afprotowatcher.SerialAfprotoWatcher):
 			cmd_id = ord(msg[0])
 			recv_cmd = self.recv_cmds[cmd_id]
 		except KeyError:
-			pass
+			logging.error('Received unknown command from quadcopter!')
+			return
 		name = recv_cmd[0]
 		unpacker = recv_cmd[1]
 		logging.debug('Message from llfc. Type: %s Length: %d' % (name, len(msg)))
-		self.event_bus.emit('llfc.%s' % name, unpacker(msg[1:]))
+		if unpacker == None:
+			self.event_bus.emit('llfc.%s' % name)
+		else:
+			self.event_bus.emit('llfc.%s' % name, unpacker(msg[1:]))
 
 	def send_command(self, cmd_id, data):
 		logging.debug('Sending command %d to llfc with data %s' % (cmd_id\
