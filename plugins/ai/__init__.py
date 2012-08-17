@@ -4,7 +4,7 @@ from eventbus import event_bus
 
 
 class AiPlugin(plugin.Plugin):
-	enabled = settings.ai_enabled
+	enabled = False
 	driver = True
 
 	def __init__(self):
