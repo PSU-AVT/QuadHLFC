@@ -41,7 +41,10 @@ class JoystickWatcher(evloop.FdWatcher):
 	def handle_read(self, fd):
 		msg = True
 		while msg:
-			msg = self.fd.read(8)
+			try:
+				msg = self.fd.read(8)
+			except IOError:
+				return
 			event = JoystickEvent.init_from_linux_raw(msg)
 			self.got_event(event)
 

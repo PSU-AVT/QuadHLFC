@@ -11,3 +11,5 @@ remoteevent_host = '0.0.0.0'
 remoteevent_port = 9601
 
 ai_enabled = False
+
+llfc_serial_path = '/dev/ttyUSB0'

@@ -29,7 +29,7 @@ class SerialAfprotoWatcher(evloop.FdWatcher):
 			self.set_writable(False)
 
 	def handle_read(self, fd):
-		self.in_buff += self.device.read(10)
+		self.in_buff += self.device.read(1)
 		tmp_buff = self.in_buff
 		msg, self.in_buff = afproto.extract_payload(self.in_buff)
 		if msg != None:
