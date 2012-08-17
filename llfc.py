@@ -29,9 +29,12 @@ class Llfc(afprotowatcher.SerialAfprotoWatcher):
 			5: ('accelerometer_state', lambda x: struct.unpack('3f', x)),
 			6: ('inertial_state', state_unpack),
 			7: ('motors_state', lambda x: struct.unpack('4f', x)),
-			8: ('setpoint_state', state_unpack),
+			8: ('roll_setpoint', lambda x: struct.unpack('f', x)),
+			9: ('pitch_setpoint', lambda x: struct.unpack('f', x)),
+			10: ('yaw_setpoint', lambda x: struct.unpack('f', x)),
 			11: ('turn_on', None),
-			12: ('turn_off', None)
+			12: ('turn_off', None),
+			13: ('z_setpoint', lambda x: struct.unpack('f', x)),
 			}
 
 	def handle_msg(self, msg):

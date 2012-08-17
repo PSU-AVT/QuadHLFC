@@ -52,7 +52,7 @@ class JoystickWatcher(evloop.FdWatcher):
 		logging.debug('Joystick event: %s' % event)
     		event_bus.emit('joystick.got_event', event)
 		if event.event_type == JoystickEvent.AXIS_EVENT:
-			if event.number == 3:
+			if event.number == 2:
 				event.value -= 32767
 				event.value = -event.value
 				llfc.set_z(event.value / float(32767))
