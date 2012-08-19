@@ -52,13 +52,13 @@ class JoystickWatcher(evloop.FdWatcher):
 		logging.debug('Joystick event: %s' % event)
     		event_bus.emit('joystick.got_event', event)
 		if event.event_type == JoystickEvent.AXIS_EVENT:
-			if event.number == 2:
+			if event.number == settings.joystick_z_axis:
 				event.value -= 32767
 				event.value = -event.value
 				llfc.set_z(event.value / float(32767))
-			elif event.number == 0:
+			elif event.number == settings.joystick_roll_axis:
 				llfc.set_roll(event.value / float(32767))
-			elif event.number == 1:
+			elif event.number == settings.joystick_picth_axis:
 				llfc.set_pitch(event.value / float(32767))
 		elif event.event_type == JoystickEvent.BUTTON_EVENT:
 			if (event.number == 2 or event.number == 3) and event.value == 1:
